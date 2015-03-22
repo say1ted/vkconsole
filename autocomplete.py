@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 
+from prompt_toolkit.contrib.shortcuts import get_input
 from prompt_toolkit import CommandLineInterface
-from prompt_toolkit.line import Line
-from prompt_toolkit.layout import Layout
 from prompt_toolkit.layout.prompt import DefaultPrompt
 from prompt_toolkit.layout.menus import CompletionsMenu
 from prompt_toolkit.contrib.completers import WordCompleter
@@ -22,15 +21,9 @@ class VkStyle(Style):
 
 def autocomplete(prompt, words):
     word_complete = WordCompleter(words)
-    cli = CommandLineInterface(
-        style=VkStyle,
-        layout=Layout(before_input=DefaultPrompt(prompt),
-                      menus=[CompletionsMenu()]),
-        line=Line(completer=word_complete),
-        create_async_autocompleters=True)
     try:
-        code_obj = cli.read_input()
-        return code_obj.text
+        text = get_input(prompt, completer=word_complete, style=VkStyle)
+        return text
     except Exception as err:
         print(err)
     return ''

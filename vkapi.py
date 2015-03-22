@@ -46,12 +46,14 @@ class VkApi():
             messages_obj = self._api.messages.getHistory(count=10, chat_id=dialog.dialog_obj['message']['chat_id'])['items']
         else:
             messages_obj = self._api.messages.getHistory(count=10, user_id=dialog.dialog_obj['message']['user_id'])['items']
+
         dialog.messages = []
         for message_obj in messages_obj:
             user = self.user_by_id(message_obj['user_id'])
             user_name = '{} {}'.format(user['first_name'], user['last_name'])
             message = VkMessage(message_obj, user_name, self.my_name)
             dialog.messages.append(message)
+
         return dialog
 
     def dialog_by_title(self, title):
